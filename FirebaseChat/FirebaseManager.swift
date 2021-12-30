@@ -13,8 +13,8 @@ public protocol FireBaseManaging {
 
 
 public final class FireBaseManager: FireBaseManaging {
-    let auth: Auth
-    init() {
+    public let auth: Auth
+    public init() {
         FirebaseApp.configure()
         self.auth = Auth.auth()
     }

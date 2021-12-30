@@ -8,16 +8,29 @@
 import SwiftUI
 import Firebase
 
-struct LoginView: View {
+struct ContentView_Previews1: PreviewProvider {
+    static var previews: some View {
+        LoginView()
+            .ignoresSafeArea(.all)
+    }
+}
 
+
+struct LoginView: View {
+    //MARK: Properties
     @State private var isLoginMode = false
     @State private var email = ""
-    @State var password = ""
+    @State private var password = ""
     @State private var accountStatusMessage = ""
+    @State private var shouldShowImagePicker = false
+    @State private var image: UIImage?
     private let firebaseManager: FireBaseManaging
+    //MARK:Life cycle
     init(firebaseManager: FireBaseManaging = FireBaseManager()) {
         self.firebaseManager = firebaseManager
     }
+    
+    //MARK: View
     var body: some View {
         NavigationView {
             
@@ -29,17 +42,30 @@ struct LoginView: View {
                         Text("Create Account")
                             .tag(false)
                     }.pickerStyle(SegmentedPickerStyle())
-
+                    
                     if !isLoginMode {
                         Button {
-
+                            shouldShowImagePicker.toggle()
                         } label: {
-                            Image(systemName: "person.fill")
-                                .font(.system(size: 64))
-                                .padding()
+                            VStack {
+                                if let image = image {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 64, height: 64)
+                                        .cornerRadius(32)
+                                        
+                                } else {
+                                    Image(systemName: "person.fill")
+                                        .font(.system(size: 64))
+                                        .padding()
+                                        .foregroundColor(Color.black)
+                                }
+                            }.overlay(RoundedRectangle(cornerRadius: 64).stroke(Color.black,lineWidth: 3))
+                          
                         }
                     }
-
+                    
                     Group {
                         TextField("Email", text: $email)
                             .keyboardType(.emailAddress)
@@ -48,7 +74,7 @@ struct LoginView: View {
                     }
                     .padding(12)
                     .background(Color.white)
-
+                    
                     Button {
                         handleAction()
                     } label: {
@@ -60,31 +86,31 @@ struct LoginView: View {
                                 .font(.system(size: 14, weight: .semibold))
                             Spacer()
                         }.background(Color.blue)
-
+                        
                     }
                     
                     Text(accountStatusMessage)
                         .foregroundColor(.red)
                 }
                 .padding()
-
+                
             }
             .navigationTitle(isLoginMode ? "Log In" : "Create Account")
             .background(Color(.init(white: 0, alpha: 0.05))
                             .ignoresSafeArea())
         }.navigationViewStyle(StackNavigationViewStyle())
+            .fullScreenCover(isPresented: $shouldShowImagePicker) {
+                ImagePicker(image: $image)
+            }
     }
     
-//MARK: Methods
-    
+    //MARK: Methods
     private func createNewAccount() {
         firebaseManager.auth.createUser(withEmail: email, password: password) { result, error in
             if let error = error {
-                print("Error creating new user, Error:",error)
                 accountStatusMessage = "Failed creating new user: \(error       )"
                 return
             }
-            print("Successfullly created user \(result?.user.uid ?? "")")
             accountStatusMessage = "Successfullly created user \(result?.user.uid ?? "")"
         }
     }
@@ -97,18 +123,12 @@ struct LoginView: View {
             accountStatusMessage = "Successfullly logged in as user \(result?.user.uid ?? "")"
         }
     }
-    
     private func handleAction() {
         isLoginMode ?  loginUser() : createNewAccount()
     }
-
+    
     
 }
-struct ContentView_Previews1: PreviewProvider {
-    static var previews: some View {
-        LoginView()
-            .ignoresSafeArea(.all)
-    }
-}
- 
+
+
 
