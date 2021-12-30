@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		347A76EF277DF768007CBA8F /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347A76EE277DF768007CBA8F /* FirebaseManager.swift */; };
 		34F6CCE6277DC2EF0046E8DB /* FirebaseChatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F6CCE5277DC2EF0046E8DB /* FirebaseChatApp.swift */; };
 		34F6CCE8277DC2EF0046E8DB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F6CCE7277DC2EF0046E8DB /* ContentView.swift */; };
 		34F6CCEA277DC2EF0046E8DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34F6CCE9277DC2EF0046E8DB /* Assets.xcassets */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		347A76EE277DF768007CBA8F /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		34F6CCE2277DC2EF0046E8DB /* FirebaseChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FirebaseChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34F6CCE5277DC2EF0046E8DB /* FirebaseChatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseChatApp.swift; sourceTree = "<group>"; };
 		34F6CCE7277DC2EF0046E8DB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 			children = (
 				34F6CCE5277DC2EF0046E8DB /* FirebaseChatApp.swift */,
 				34F6CCE7277DC2EF0046E8DB /* ContentView.swift */,
+				347A76EE277DF768007CBA8F /* FirebaseManager.swift */,
 				34F6CCE9277DC2EF0046E8DB /* Assets.xcassets */,
 				34F6CCEB277DC2EF0046E8DB /* Preview Content */,
 			);
@@ -152,6 +155,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				347A76EF277DF768007CBA8F /* FirebaseManager.swift in Sources */,
 				34F6CCE8277DC2EF0046E8DB /* ContentView.swift in Sources */,
 				34F6CCE6277DC2EF0046E8DB /* FirebaseChatApp.swift in Sources */,
 			);

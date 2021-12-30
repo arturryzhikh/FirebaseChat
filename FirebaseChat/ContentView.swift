@@ -7,13 +7,16 @@
 
 import SwiftUI
 import Firebase
+
 struct LoginView: View {
 
-    @State var isLoginMode = false
-    @State var email = ""
+    @State private var isLoginMode = false
+    @State private var email = ""
     @State var password = ""
-    init() {
-        
+    @State private var accountStatusMessage = ""
+    private let firebaseManager: FireBaseManaging
+    init(firebaseManager: FireBaseManaging = FireBaseManager()) {
+        self.firebaseManager = firebaseManager
     }
     var body: some View {
         NavigationView {
@@ -59,6 +62,9 @@ struct LoginView: View {
                         }.background(Color.blue)
 
                     }
+                    
+                    Text(accountStatusMessage)
+                        .foregroundColor(.red)
                 }
                 .padding()
 
@@ -68,19 +74,41 @@ struct LoginView: View {
                             .ignoresSafeArea())
         }.navigationViewStyle(StackNavigationViewStyle())
     }
-
-    private func handleAction() {
-        if isLoginMode {
-            print("Should log into Firebase with existing credentials")
-        } else {
-            print("Register a new account inside of Firebase Auth and then store image in Storage somehow....")
+    
+//MARK: Methods
+    
+    private func createNewAccount() {
+        firebaseManager.auth.createUser(withEmail: email, password: password) { result, error in
+            if let error = error {
+                print("Error creating new user, Error:",error)
+                accountStatusMessage = "Failed creating new user: \(error       )"
+                return
+            }
+            print("Successfullly created user \(result?.user.uid ?? "")")
+            accountStatusMessage = "Successfullly created user \(result?.user.uid ?? "")"
         }
     }
-}
+    
+    private func loginUser() {
+        firebaseManager.auth.signIn(withEmail: email, password: password) { result, error in
+            if let error = error {
+                accountStatusMessage = "Failed to logint user: \(error)"
+            }
+            accountStatusMessage = "Successfullly logged in as user \(result?.user.uid ?? "")"
+        }
+    }
+    
+    private func handleAction() {
+        isLoginMode ?  loginUser() : createNewAccount()
+    }
 
-struct ContentView_Previews: PreviewProvider {
+    
+}
+struct ContentView_Previews1: PreviewProvider {
     static var previews: some View {
         LoginView()
             .ignoresSafeArea(.all)
     }
 }
+ 
+
