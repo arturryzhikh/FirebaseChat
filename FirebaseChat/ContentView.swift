@@ -8,12 +8,6 @@
 import SwiftUI
 import Firebase
 
-struct ContentView_Previews1: PreviewProvider {
-    static var previews: some View {
-        LoginView()
-            .ignoresSafeArea(.all)
-    }
-}
 
 
 struct LoginView: View {
@@ -104,7 +98,8 @@ struct LoginView: View {
             }
     }
     
-    //MARK: Methods
+    //MARK: Methods Firebase
+    
     private func createNewAccount() {
         firebaseManager.auth.createUser(withEmail: email, password: password) { result, error in
             if let error = error {
@@ -112,6 +107,7 @@ struct LoginView: View {
                 return
             }
             accountStatusMessage = "Successfullly created user \(result?.user.uid ?? "")"
+            persistImageToStorage()
         }
     }
     
@@ -123,6 +119,32 @@ struct LoginView: View {
             accountStatusMessage = "Successfullly logged in as user \(result?.user.uid ?? "")"
         }
     }
+    private func persistImageToStorage() {
+        guard let uid = firebaseManager.auth.currentUser?.uid,
+        let imageData = image?.jpegData(compressionQuality: 0.5) else {
+            return
+            
+        }
+        let reference = firebaseManager.storage.reference(withPath: uid)
+        reference.putData(imageData, metadata: nil) { metadata, error in
+            if let error = error {
+                accountStatusMessage = "Fail to push image to firebasse storage: \(error)"
+                return
+            }
+            reference.downloadURL { url, error in
+                if let error = error {
+                    accountStatusMessage = "Fail to retrieve downloaded image url : \(error)"
+                    return
+                }
+                accountStatusMessage = "Successfully stored image with url: \(url?.absoluteString ?? "")"
+                print(url?.absoluteString)
+                
+            }
+            
+        }
+        
+    }
+    //MARK: Methods
     private func handleAction() {
         isLoginMode ?  loginUser() : createNewAccount()
     }
