@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		34640E8227861A87001DE6BE /* NewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34640E8127861A86001DE6BE /* NewMessageView.swift */; };
+		34640E8427861E08001DE6BE /* NewMessageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34640E8327861E08001DE6BE /* NewMessageViewModel.swift */; };
 		347A76EF277DF768007CBA8F /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347A76EE277DF768007CBA8F /* FirebaseManager.swift */; };
 		347A76F3277DFA86007CBA8F /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347A76F2277DFA86007CBA8F /* ImagePicker.swift */; };
 		34955B7D27858402008FFD3A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 34955B7C27858402008FFD3A /* FirebaseAuth */; };
@@ -26,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		34640E8127861A86001DE6BE /* NewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessageView.swift; sourceTree = "<group>"; };
+		34640E8327861E08001DE6BE /* NewMessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessageViewModel.swift; sourceTree = "<group>"; };
 		347A76EE277DF768007CBA8F /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		347A76F2277DFA86007CBA8F /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		34955B8327858E88008FFD3A /* MainMessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessagesView.swift; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				34955B8327858E88008FFD3A /* MainMessagesView.swift */,
+				34640E8327861E08001DE6BE /* NewMessageViewModel.swift */,
 				34640E8127861A86001DE6BE /* NewMessageView.swift */,
 				34F863822785D07200876852 /* MainMessagesViewModel.swift */,
 				34F863842785D6CD00876852 /* User.swift */,
@@ -188,6 +191,7 @@
 				347A76EF277DF768007CBA8F /* FirebaseManager.swift in Sources */,
 				347A76F3277DFA86007CBA8F /* ImagePicker.swift in Sources */,
 				34640E8227861A87001DE6BE /* NewMessageView.swift in Sources */,
+				34640E8427861E08001DE6BE /* NewMessageViewModel.swift in Sources */,
 				34955B8427858E88008FFD3A /* MainMessagesView.swift in Sources */,
 				34F6CCE8277DC2EF0046E8DB /* LoginView.swift in Sources */,
 				34F6CCE6277DC2EF0046E8DB /* FirebaseChatApp.swift in Sources */,

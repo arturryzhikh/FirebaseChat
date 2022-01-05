@@ -38,7 +38,7 @@ struct MainMessagesView: View {
                 )
                 
             VStack(alignment: .leading, spacing: 4) {
-                Text("\(viewModel.user?.accountName ?? "")")
+                Text("\(viewModel.user?.name ?? "")")
                     .font(.system(size: 24, weight: .bold))
                 
                 HStack {

@@ -7,11 +7,13 @@
 
 import Foundation
 
-struct User {
+struct User: Identifiable {
+    var id: String { uid }
+    
     let uid: String
     let email: String
     let profileImageUrl: String
-    var accountName: String {
+    var name: String {
         return email.replacingOccurrences(of: "@gmail.com", with: "")
     }
     init(data: [String: Any]) {
