@@ -11,19 +11,29 @@ public class MainMessagesViewModel: ObservableObject {
     
     @Published var errorMessage: String = ""
     @Published var user: User?
+    @Published var isLoggedOut = false
     
-    private let firebaseManager: FireBaseManaging
-    init(firebaseManager: FireBaseManaging = FireBaseManager()) {
-        self.firebaseManager = firebaseManager
+    private let fbManager = FireBaseManager()
+    //MARK: life cycle
+    init() {
+        DispatchQueue.main.async {
+            self.isLoggedOut =  self.fbManager.auth.currentUser?.uid == nil
+        }
+        
         fetchCurrentUser()
     }
     
-    private func fetchCurrentUser() {
-        guard let uid = firebaseManager.auth.currentUser?.uid else  {
+    func handleSignOut() throws {
+        isLoggedOut.toggle()
+        try? fbManager.auth.signOut()
+    }
+    
+    func fetchCurrentUser() {
+        guard let uid = fbManager.auth.currentUser?.uid else  {
             errorMessage = "Could not find users id"
             return
         }
-        firebaseManager.firestore.collection("users")
+        fbManager.firestore.collection("users")
             .document(uid).getDocument { snapshot, error in
                 if let error = error {
                     self.errorMessage = "Failed to fetch current user document \(error)"
@@ -33,10 +43,8 @@ public class MainMessagesViewModel: ObservableObject {
                     self.errorMessage = "No data found for user : \(uid)"
                     return
                 }
-                let uid = data["uid"] as? String ?? ""
-                let email = data["email"] as? String ?? ""
-                let imageUrl = data ["profileImageUrl"] as? String ?? ""
-                self.user = User(uid: uid, email: email, profileImageUrl: imageUrl)
+                
+                self.user = User(data: data)
                 
             }
     }

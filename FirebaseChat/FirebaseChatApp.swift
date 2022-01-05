@@ -6,13 +6,20 @@
 //
 
 import SwiftUI
-
+import Firebase
 @main
+
+
 struct FirebaseChatApp: App {
-    var body: some Scene {
+    
+    
+   var body: some Scene {
         WindowGroup {
-//            LoginView()
             MainMessagesView()
         }
+    }
+   
+    init() {
+        FirebaseApp.configure()
     }
 }

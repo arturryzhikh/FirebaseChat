@@ -12,16 +12,17 @@ import FirebaseFirestore
 
 struct LoginView: View {
     //MARK: Properties
+    let didCompleteLogin: () -> Void
     @State private var isLoginMode = false
     @State private var email = ""
     @State private var password = ""
     @State private var accountStatusMessage = ""
     @State private var shouldShowImagePicker = false
     @State private var image: UIImage?
-    private let firebaseManager: FireBaseManaging
+    private let fbManager = FireBaseManager()
     //MARK:Life cycle
-    init(firebaseManager: FireBaseManaging = FireBaseManager()) {
-        self.firebaseManager = firebaseManager
+    init(didCompleteLogin: @escaping () -> Void ) {
+        self.didCompleteLogin = didCompleteLogin
     }
     
     //MARK: View
@@ -101,7 +102,11 @@ struct LoginView: View {
     //MARK: Methods Firebase
     
     private func createNewAccount() {
-        firebaseManager.auth.createUser(withEmail: email, password: password) { result, error in
+        if image == nil {
+            accountStatusMessage = "You need to pick avatar image"
+            return
+        }
+        fbManager.auth.createUser(withEmail: email, password: password) { result, error in
             if let error = error {
                 accountStatusMessage = "Failed creating new user: \(error       )"
                 return
@@ -112,20 +117,22 @@ struct LoginView: View {
     }
     
     private func loginUser() {
-        firebaseManager.auth.signIn(withEmail: email, password: password) { result, error in
+        fbManager.auth.signIn(withEmail: email, password: password) { result, error in
             if let error = error {
                 accountStatusMessage = "Failed to logint user: \(error)"
             }
             accountStatusMessage = "Successfullly logged in as user \(result?.user.uid ?? "")"
+            didCompleteLogin()
         }
+        
     }
     private func persistImageToStorage() {
-        guard let uid = firebaseManager.auth.currentUser?.uid,
+        guard let uid = fbManager.auth.currentUser?.uid,
         let imageData = image?.jpegData(compressionQuality: 0.5) else {
             return
             
         }
-        let reference = firebaseManager.storage.reference(withPath: uid)
+        let reference = fbManager.storage.reference(withPath: uid)
         reference.putData(imageData, metadata: nil) { metadata, error in
             if let error = error {
                 accountStatusMessage = "Fail to push image to firebasse storage: \(error)"
@@ -145,10 +152,11 @@ struct LoginView: View {
             }
             
         }
+        
     }
     
     private func storeUserInformation(profileImageUrl: URL) {
-        guard let uid = firebaseManager.auth.currentUser?.uid else {
+        guard let uid = fbManager.auth.currentUser?.uid else {
             return
         }
         let userData: [String: Any] = [
@@ -156,14 +164,14 @@ struct LoginView: View {
             "uid": uid,
             "profileImageUrl": profileImageUrl.absoluteString
         ]
-        firebaseManager.firestore.collection("users")
+        fbManager.firestore.collection("users")
             .document(uid).setData(userData) { error in
                 if let error = error  {
-                    print(error)
                     accountStatusMessage = "Failed to store user data \(error)"
                     return
                 }
-                print("Successfully stored user data")
+                accountStatusMessage = "Successfully stored user data"
+                
             }
     }
     //MARK: Methods
