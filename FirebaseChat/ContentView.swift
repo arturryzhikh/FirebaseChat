@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Firebase
-
+import FirebaseFirestore
 
 
 struct LoginView: View {
@@ -137,12 +137,34 @@ struct LoginView: View {
                     return
                 }
                 accountStatusMessage = "Successfully stored image with url: \(url?.absoluteString ?? "")"
-                print(url?.absoluteString)
+                guard let url = url else {
+                    return
+                }
+                storeUserInformation(profileImageUrl: url)
                 
             }
             
         }
-        
+    }
+    
+    private func storeUserInformation(profileImageUrl: URL) {
+        guard let uid = firebaseManager.auth.currentUser?.uid else {
+            return
+        }
+        let userData: [String: Any] = [
+            "email": email,
+            "uid": uid,
+            "profileImageUrl": profileImageUrl.absoluteString
+        ]
+        firebaseManager.firestore.collection("users")
+            .document(uid).setData(userData) { error in
+                if let error = error  {
+                    print(error)
+                    accountStatusMessage = "Failed to store user data \(error)"
+                    return
+                }
+                print("Successfully stored user data")
+            }
     }
     //MARK: Methods
     private func handleAction() {
